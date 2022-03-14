@@ -7,10 +7,27 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const baseUrl = `${process.env.API_URL}?api_key=${process.env.API_KEY}&autoparse=true`;
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Welcome to Amazon Scrapper API.");
+});
+
+// GET Product Search Results
+app.get("/search", async (req, res) => {
+  const { q, ads = false } = req.query;
+
+  const url = `https://www.amazon.jp/s?k=${q}`;
+  const encodedURI = encodeURI(url);
+  try {
+    const response = await request(`${baseUrl}&url=${encodedURI}`);
+    ads
+      ? res.json(JSON.parse(response))
+      : res.json(JSON.parse(response).results);
+  } catch (error) {
+    res.json(error);
+  }
 });
 
 // GET Product Details
