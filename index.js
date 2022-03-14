@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 });
 
 // GET Product Search Results
-app.get("/search", async (req, res) => {
+app.get("/api/search", async (req, res) => {
   const { key, q, ads = false } = req.query;
 
   const url = `https://www.amazon.jp/s?k=${q}`;
@@ -33,7 +33,7 @@ app.get("/search", async (req, res) => {
 });
 
 // GET Product Details
-app.get("/products/:productId", async (req, res) => {
+app.get("/api/products/:productId", async (req, res) => {
   const { productId } = req.params;
   const { key } = req.query;
 
@@ -47,7 +47,7 @@ app.get("/products/:productId", async (req, res) => {
 });
 
 // GET Product Reviews
-app.get("/products/:productId/reviews", async (req, res) => {
+app.get("/api/products/:productId/reviews", async (req, res) => {
   const { productId } = req.params;
   const { key } = req.query;
 
@@ -64,7 +64,7 @@ app.get("/products/:productId/reviews", async (req, res) => {
 });
 
 // GET Product Offers
-app.get("/products/:productId/offers", async (req, res) => {
+app.get("/api/products/:productId/offers", async (req, res) => {
   const { productId } = req.params;
   const { key } = req.query;
 
