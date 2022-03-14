@@ -6,22 +6,24 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const baseUrl = `${process.env.API_URL}?api_key=${process.env.API_KEY}&autoparse=true`;
+const getScraperUrl = (key) =>
+  `${process.env.API_URL}?api_key=${key}&autoparse=true`;
 
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Amazon Scrapper API.");
+  res.send("Welcome to Amazon Japan Scrapper API.");
 });
 
 // GET Product Search Results
 app.get("/search", async (req, res) => {
-  const { q, ads = false } = req.query;
+  const { key, q, ads = false } = req.query;
 
   const url = `https://www.amazon.jp/s?k=${q}`;
-  const encodedURI = encodeURI(url);
+  const encodedUrl = encodeURI(url);
+
   try {
-    const response = await request(`${baseUrl}&url=${encodedURI}`);
+    const response = await request(`${getScraperUrl(key)}&url=${encodedUrl}`);
     ads
       ? res.json(JSON.parse(response))
       : res.json(JSON.parse(response).results);
@@ -33,11 +35,11 @@ app.get("/search", async (req, res) => {
 // GET Product Details
 app.get("/products/:productId", async (req, res) => {
   const { productId } = req.params;
+  const { key } = req.query;
 
+  const url = `https://www.amazon.jp/dp/${productId}`;
   try {
-    const response = await request(
-      `${baseUrl}&url=https://www.amazon.jp/dp/${productId}`
-    );
+    const response = await request(`${getScraperUrl(key)}&url=${url}`);
     res.json(JSON.parse(response));
   } catch (error) {
     res.json(error);
@@ -47,10 +49,13 @@ app.get("/products/:productId", async (req, res) => {
 // GET Product Reviews
 app.get("/products/:productId/reviews", async (req, res) => {
   const { productId } = req.params;
+  const { key } = req.query;
+
+  const url = `https://www.amazon.jp/product-reviews/${productId}`;
 
   try {
     const response = await request(
-      `${baseUrl}&url=https://www.amazon.jp/product-reviews/${productId}`
+      `${getScraperUrl(key)}&url=https://www.amazon.jp/product-reviews/${url}`
     );
     res.json(JSON.parse(response));
   } catch (error) {
@@ -61,11 +66,12 @@ app.get("/products/:productId/reviews", async (req, res) => {
 // GET Product Offers
 app.get("/products/:productId/offers", async (req, res) => {
   const { productId } = req.params;
+  const { key } = req.query;
+
+  const url = `https://www.amazon.jp/gp/offer-listing/${productId}`;
 
   try {
-    const response = await request(
-      `${baseUrl}&url=https://www.amazon.jp/gp/offer-listing/${productId}`
-    );
+    const response = await request(`${getScraperUrl(key)}&url=${url}`);
     res.json(JSON.parse(response));
   } catch (error) {
     res.json(error);
