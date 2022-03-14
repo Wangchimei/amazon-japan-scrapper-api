@@ -1,5 +1,5 @@
 {
-  "name": "amazon-scraper",
+  "name": "amazon-japan-scraper-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,8 +7,10 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "Amazon Japan Scraper API"
+  ],
+  "author": "Wangchimei",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.0",
