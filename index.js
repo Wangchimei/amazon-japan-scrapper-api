@@ -17,14 +17,14 @@ app.get("/", (req, res) => {
 
 // GET Product Search Results
 app.get("/api/search", async (req, res) => {
-  const { key, q, ads = false } = req.query;
+  const { key, q, ads = "true" } = req.query;
 
   const url = `https://www.amazon.jp/s?k=${q}`;
   const encodedUrl = encodeURI(url);
 
   try {
     const response = await request(`${getScraperUrl(key)}&url=${encodedUrl}`);
-    ads
+    ads === "true"
       ? res.json(JSON.parse(response))
       : res.json(JSON.parse(response).results);
   } catch (error) {
